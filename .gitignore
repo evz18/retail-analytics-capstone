@@ -1,0 +1,11 @@
+# Raw data
+*.csv
+*.parquet
+*.zip
+
+# Python/Jupyter
+.ipynb_checkpoints/
+__pycache__/
+
+# macOS
+.DS_Store
