@@ -26,28 +26,33 @@ This project examines different stages of the retail customer and product lifecy
 - Azure Blob Storage
 - Azure Data Factory
 - Parquet
-- Azure Synapse SQL *(in progress)*
+- Azure Synapse Serverless SQL *(next stage)*
 - Power BI *(planned)*
 
 ## Project Architecture
 
-Current end-to-end architecture:
+The project combines a Python-based analytics workflow with a cloud
+data-engineering and business intelligence pipeline.
 
-Raw Retail Data  
-↓  
-Python EDA & Machine Learning  
-↓  
-Azure Blob Storage  
-↓  
-Azure Data Factory  
-↓  
-Processed Parquet  
-↓  
-Curated Analytics Layer *(in progress)*  
-↓  
-Synapse SQL  
-↓  
-Power BI
+Cloud analytics architecture:
+
+Raw Retail Data\
+↓\
+Azure Blob Storage (Raw Layer)\
+↓\
+Azure Data Factory\
+↓\
+Processed Parquet\
+↓\
+Azure Synapse Serverless SQL *(next stage)*\
+↓\
+Curated Analytics Layer\
+↓\
+Power BI *(planned)*
+
+Python notebooks are used separately for exploratory data analysis, feature
+engineering, machine learning, model evaluation, and interpretation across the
+four retail datasets.
 
 ## Machine Learning
 
@@ -89,37 +94,60 @@ characteristics alone.
 ## Azure Data Pipeline
 
 The cloud data-engineering portion of the project uses Azure Blob Storage and
-Azure Data Factory.
+Azure Data Factory to ingest and standardize the four retail datasets.
 
-The Olist ingestion pipeline currently:
+The ingestion workflow:
 
 - Preserves original source files in a raw data layer
 - Uses Azure Managed Identity and RBAC for secure storage access
 - Uses parameterized source and sink datasets
-- Uses an Azure Data Factory ForEach activity to process multiple source files
-- Converts raw CSV files into analytics-optimized Parquet files
-- Processes all nine Olist source tables through a reusable ingestion workflow
+- Uses Azure Data Factory ForEach activities for reusable multi-file ingestion
+- Converts Olist and Instacart CSV source files into Parquet
+- Converts the US E-Commerce CSV into Parquet and standardizes column names to
+  snake_case
+- Retains Amazon source files in their existing Parquet format until meaningful
+  downstream transformations are performed
+- Stores standardized outputs in a processed data layer for downstream SQL analysis
 
-See [`azure/README.md`](azure/README.md) for implementation details.
+See [azure/README.md](azure/README.md) for implementation details.
+
+## Data Ingestion Status
+
+The raw-to-processed ingestion stage is complete.
+
+- **Olist:** Nine CSV files converted to Parquet using a parameterized ADF
+  ForEach pipeline.
+- **Instacart:** Six CSV files converted to Parquet using a reusable parameterized
+  ADF ForEach pipeline.
+- **US E-Commerce:** CSV converted to Parquet with column names standardized to
+  snake_case for downstream SQL analysis.
+- **Amazon Reviews:** Source data was already stored as Parquet, so an unnecessary
+  Parquet-to-Parquet processing step was intentionally avoided.
+
+### Pipeline Features
+
+- Azure Blob Storage raw and processed layers
+- Azure Data Factory orchestration
+- Parameterized datasets and dynamic content
+- ForEach activities for multi-file ingestion
+- Managed Identity authentication with RBAC
+- CSV-to-Parquet conversion with Snappy compression
+- Schema standardization for downstream analytics
+- Pipeline validation and targeted debugging of CSV parsing and dynamic parameters
 
 ## Repository Structure
 
-    retail-analytics-capstone/
-    ├── amazon/
-    ├── instacart/
-    ├── us_ecommerce/
-    ├── olist/
-    ├── azure/
-    │   └── README.md
-    ├── .gitignore
-    └── README.md
-
-## Current Status
-
-- Python EDA and machine learning: Complete
-- Olist customer satisfaction analysis: Complete
-- Azure raw data ingestion: Complete
-- Azure processed Parquet layer: Complete
-- Curated analytics layer: In progress
-- Synapse SQL analysis: Planned
-- Power BI dashboard: Planned
+```text
+retail-analytics-capstone/
+├── amazon/
+│   └── amazon_analysis.ipynb
+├── instacart/
+│   └── instacart_analysis.ipynb
+├── us_ecommerce/
+│   └── us_ecommerce_analysis.ipynb
+├── olist/
+│   └── Olist_dataset.ipynb
+├── azure/
+│   └── README.md
+├── .gitignore
+└── README.md
