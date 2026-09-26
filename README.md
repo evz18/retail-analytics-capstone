@@ -71,25 +71,119 @@ including:
 Model performance is evaluated using appropriate classification, regression,
 and clustering metrics such as ROC-AUC, RMSE, R², and silhouette score.
 
-## Olist Customer Satisfaction Analysis
+## Key Findings Across Datasets
 
-The Olist analysis investigates whether order, fulfillment, payment, product,
-geographic, and temporal characteristics can predict whether a customer leaves
-a positive review.
+### Amazon Reviews — Product Popularity
 
-Key findings include:
+The Amazon analysis examined whether product characteristics could help explain
+and predict product popularity.
 
-- Approximately 83% of on-time or early orders received positive reviews,
-  compared with approximately 27% of late orders.
-- Positive-review rates decreased as order size increased.
-- Delivery time and number of items were important predictive features.
-- HistGradientBoosting produced the highest observed ROC-AUC at approximately 0.706.
-- Geographic differences were useful descriptively but contributed relatively
-  little to individual-level prediction.
+- Random Forest achieved a ROC-AUC of approximately **0.694** for popularity
+  classification.
+- Gradient Boosting improved rating-count regression performance to approximately
+  **R² = 0.227**, compared with **R² = 0.114** for the Linear Regression baseline.
+- Average product rating was the dominant Random Forest feature, accounting for
+  approximately **88% of feature importance**, substantially exceeding price and
+  helpful-vote activity.
+- Clustering identified distinct groups of products based on characteristics such
+  as rating, price, and customer engagement.
 
-Overall, fulfillment performance and order complexity were more informative
-indicators of customer satisfaction than transaction or geographic
-characteristics alone.
+These results suggest that product popularity contains meaningful nonlinear
+patterns and that customer rating information is particularly informative when
+distinguishing more popular products.
+
+
+### Instacart — Product Reordering
+
+The Instacart analysis examined whether order and product characteristics could
+predict whether an item would be reordered.
+
+- Random Forest achieved a ROC-AUC of approximately **0.65**, while K-Nearest
+  Neighbors achieved approximately **0.63**.
+- Support Vector Machine models produced ROC-AUC values of approximately
+  **0.58–0.61**, depending on the kernel.
+- Reordering was the most difficult of the four primary classification problems,
+  with substantially weaker class separation than profitability prediction.
+
+The results indicate that the available product and order characteristics contain
+some predictive signal, but repeat purchasing is likely influenced by additional
+customer preferences and behavioral factors not captured by these features.
+
+
+### US E-Commerce — Profitability
+
+The US E-Commerce analysis examined order profitability and geographic purchasing
+patterns.
+
+- Logistic Regression achieved a ROC-AUC of approximately **0.94** for
+  profitability classification.
+- Approximately **81% of observations were already profitable**, providing
+  important context for interpreting the strong classification results.
+- Random Forest achieved approximately **R² = 0.73** for profit regression,
+  compared with approximately **R² = 0.22** for Linear Regression.
+- Geographic analysis also identified meaningful differences in sales and order
+  volume across regions.
+
+The large improvement from Linear Regression to Random Forest suggests that
+profitability is influenced by important nonlinear relationships among the
+available transaction characteristics.
+
+
+### Olist — Customer Satisfaction
+
+The Olist analysis examined whether order, fulfillment, payment, product,
+geographic, and temporal characteristics could predict positive customer reviews.
+
+- Approximately **83% of on-time or early orders** received positive reviews,
+  compared with only approximately **26–27% of late orders**.
+- Positive-review rates decreased as order size increased, with approximately
+  **81% positive reviews for one-item orders** compared with approximately
+  **55% for orders containing six or more items**.
+- Average delivery time and state-level positive-review rates showed a strong
+  negative relationship of approximately **r = -0.82**.
+- HistGradientBoosting achieved the highest observed classification performance
+  at approximately **ROC-AUC = 0.706**.
+- Delivery time and number of items were among the most important predictive
+  features, while geography contributed relatively little to individual-level
+  prediction.
+
+These findings suggest that fulfillment performance and order complexity are
+more informative indicators of customer satisfaction than transaction or
+geographic characteristics alone.
+
+
+## Cross-Dataset Insights
+
+Analyzing the four datasets together revealed several broader patterns across
+the retail customer and product lifecycle:
+
+- **Nonlinear relationships were common.** Tree-based and boosting models often
+  outperformed linear baselines, particularly for Amazon popularity and
+  US E-Commerce profit prediction.
+
+- **Predictability depended heavily on the business problem.** Profitability was
+  comparatively predictable from the available transaction data, while
+  individual product reordering was substantially more difficult to predict.
+
+- **The most useful predictors changed across stages of the retail lifecycle.**
+  Product ratings were especially informative for Amazon popularity, transaction
+  characteristics helped explain profitability, and fulfillment performance and
+  order complexity were important for Olist customer satisfaction.
+
+- **EDA directly informed model development.** Variables such as price, sales,
+  helpful votes, and order counts exhibited substantial skew, motivating
+  transformations and scaling, while weak linear relationships supported the
+  use of more flexible nonlinear models.
+
+- **Descriptive relationships were not always strong predictive features.**
+  For example, Olist showed meaningful geographic differences in satisfaction,
+  but delivery performance was more useful for predicting individual customer
+  outcomes.
+
+Overall, the project demonstrates that **product demand, repeat purchasing,
+profitability, and post-purchase satisfaction represent distinct retail
+problems that require different features and modeling approaches rather than
+a single universal predictor or algorithm**.
 
 ## Azure Data Pipeline
 
