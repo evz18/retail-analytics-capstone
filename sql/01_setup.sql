@@ -1,0 +1,2 @@
+-- Retail Analytics Capstone
+-- Synapse Serverless SQL setup
