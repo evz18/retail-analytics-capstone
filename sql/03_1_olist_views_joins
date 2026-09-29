@@ -160,3 +160,102 @@
 
 -- LEFT JOIN dbo.vw_olist_reviews_by_order r
 --     ON o.order_id = r.order_id;
+
+-- I) Base customers view               #CREATE CUSTOMERS VIEW table
+-- CREATE OR ALTER VIEW dbo.vw_olist_customers AS
+-- SELECT *
+-- FROM OPENROWSET(
+--     BULK 'https://evzomdssa.dfs.core.windows.net/retail-capstone/processed/olist/customers.parquet',
+--     FORMAT = 'PARQUET'
+-- ) AS result;
+
+-- J) Add customer geography to order-level dataset    #TOTAL 4 VIEW TABLES JOINED 10 cols (o,c,i,r)
+-- SELECT TOP 20
+--     o.order_id,
+--     o.customer_id,
+--     o.order_status,
+--     o.order_purchase_timestamp,
+
+--     c.customer_city,
+--     c.customer_state,
+
+--     i.num_items,
+--     i.item_total,
+--     i.freight_total,
+
+--     r.avg_review_score
+
+-- FROM dbo.vw_olist_orders o
+
+-- LEFT JOIN dbo.vw_olist_customers c
+--     ON o.customer_id = c.customer_id
+
+-- LEFT JOIN dbo.vw_olist_items_by_order i
+--     ON o.order_id = i.order_id
+
+-- LEFT JOIN dbo.vw_olist_reviews_by_order r
+--     ON o.order_id = r.order_id;
+
+-- -- K) Validate final JOIN is still one row per order (good, still 99441 unique)
+-- SELECT
+--     COUNT(*) AS total_rows,
+--     COUNT(DISTINCT o.order_id) AS unique_orders
+-- FROM dbo.vw_olist_orders o
+
+-- LEFT JOIN dbo.vw_olist_customers c
+--     ON o.customer_id = c.customer_id
+
+-- LEFT JOIN dbo.vw_olist_items_by_order i
+--     ON o.order_id = i.order_id
+
+-- LEFT JOIN dbo.vw_olist_reviews_by_order r
+--     ON o.order_id = r.order_id;
+
+-- -- inspect Olist order types final time      (still all varchar!)
+-- SELECT
+--     COLUMN_NAME,
+--     DATA_TYPE
+-- FROM INFORMATION_SCHEMA.COLUMNS
+-- WHERE TABLE_NAME = 'vw_olist_orders';
+
+-- L) Create curated Olist order-level view     #CREATE FINAL COMBINED VIEW TABLE w/correct dtypes !
+CREATE OR ALTER VIEW dbo.vw_curated_olist AS
+SELECT
+    -- IDs / categories
+    o.order_id,
+    o.customer_id,
+    o.order_status,
+
+    --proper datetime types
+    CAST(o.order_purchase_timestamp AS DATETIME2) AS order_purchase_timestamp,
+    CAST(o.order_approved_at AS DATETIME2) AS order_approved_at,
+    CAST(o.order_delivered_carrier_date AS DATETIME2) AS order_delivered_carrier_date,
+    CAST(o.order_delivered_customer_date AS DATETIME2) AS order_delivered_customer_date,
+    CAST(o.order_estimated_delivery_date AS DATETIME2) AS order_estimated_delivery_date,
+
+    -- customer geography
+    c.customer_city,
+    c.customer_state,
+
+    -- order-level item features
+    i.num_items,
+    i.item_total,
+    i.freight_total,
+
+    -- review
+    r.avg_review_score,
+    r.num_reviews
+
+FROM dbo.vw_olist_orders o
+
+LEFT JOIN dbo.vw_olist_customers c
+    ON o.customer_id = c.customer_id
+
+LEFT JOIN dbo.vw_olist_items_by_order i
+    ON o.order_id = i.order_id
+
+LEFT JOIN dbo.vw_olist_reviews_by_order r
+    ON o.order_id = r.order_id;
+
+SELECT TOP 10 *
+FROM dbo.vw_curated_olist;
