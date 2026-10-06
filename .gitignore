@@ -2,6 +2,7 @@
 *.csv
 *.parquet
 *.zip
+*.pbix
 
 # Python/Jupyter
 .ipynb_checkpoints/
