@@ -16,7 +16,7 @@ Key findings:
 - Higher Amazon product ratings were generally associated with greater product popularity.
 - Amazon Devices had the highest average rating count among the leading product categories.
 
-![Product Performance Dashboard](images/product_performance_dashboard.png)
+![Product Performance Dashboard](images/main_product_performance_dashboard.png)
 
 ### 2. Customer Behavior & Retention
 
