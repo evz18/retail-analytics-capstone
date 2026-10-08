@@ -15,7 +15,9 @@ The project combines Python-based exploratory analysis and machine learning with
 
 ### Olist Customer Satisfaction Predictor
 
-**[Launch Interactive Streamlit App](https://olist-satisfaction-predictor.streamlit.app/)**
+**[Launch Interactive Streamlit App](https://olist-satisfaction-predictor.streamlit.app/)** (best in Google Chrome)
+
+![Olist Customer Satisfaction Predictor](streamlit_app/images/olist_prediction_app.png)
 
 A deployed machine learning application that estimates the probability of a positive customer review based on order characteristics, delivery performance, payment information, and customer location.
 
