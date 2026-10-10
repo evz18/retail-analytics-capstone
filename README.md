@@ -11,6 +11,37 @@ The project examines four stages of the retail lifecycle:
 
 The project combines Python-based exploratory analysis and machine learning with an Azure data pipeline, curated SQL views, interactive Power BI dashboards, and a deployed Streamlit prediction application.
 
+## Technology Stack
+
+### Data Science & Machine Learning
+- Python
+- pandas / NumPy
+- scikit-learn
+- Matplotlib / Seaborn
+- Jupyter Notebooks
+
+### Cloud & Data Engineering
+- Azure Blob Storage
+- Azure Data Factory
+- Azure Synapse Serverless SQL
+- Parquet
+- SQL
+
+### Business Intelligence
+- Power BI
+- DAX
+- Power Query
+
+### Application Development & Deployment
+- Streamlit
+- joblib
+- Streamlit Community Cloud
+
+### Version Control & Development
+- Git
+- GitHub
+- VS Code
+
 ## Live Machine Learning Application
 
 ### Olist Customer Satisfaction Predictor
@@ -255,36 +286,16 @@ Several broader findings emerged across the retail lifecycle:
 
 Overall, the project demonstrates how data science, cloud engineering, and business intelligence can support decisions across merchandising, customer retention, pricing, and fulfillment.
 
-## Technology Stack
+## Limitations & Future Improvements
 
-### Data Science & Machine Learning
-- Python
-- pandas / NumPy
-- scikit-learn
-- Matplotlib / Seaborn
-- Jupyter Notebooks
+While the project demonstrates an end-to-end retail analytics workflow, several opportunities remain for further development:
 
-### Cloud & Data Engineering
-- Azure Blob Storage
-- Azure Data Factory
-- Azure Synapse Serverless SQL
-- Parquet
-- SQL
+- **Improve predictive performance:** Incorporate additional customer-level and historical behavioral features, particularly for Instacart reorder prediction and Olist customer satisfaction.
+- **Expand dataset coverage:** Use larger, more representative samples of the Amazon and Instacart datasets to improve generalizability and reduce sampling limitations.
+- **Evaluate model reliability:** Assess probability calibration, class imbalance, and performance across customer segments to better understand how predictions would perform in practice.
+- **Automate data workflows:** Extend the Azure pipeline to support scheduled ingestion, data quality checks, and automated dashboard refreshes.
+- **Monitor deployed models:** Add prediction logging, data drift monitoring, and periodic model evaluation to support ongoing reliability.
 
-### Business Intelligence
-- Power BI
-- DAX
-- Power Query
-
-### Application Development & Deployment
-- Streamlit
-- joblib
-- Streamlit Community Cloud
-
-### Version Control & Development
-- Git
-- GitHub
-- VS Code
 
 ## Repository Structure
 
